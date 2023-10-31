@@ -1,10 +1,10 @@
 {
   "name": "faucet-service",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Nest application, implementing server-side Attractor Faucet logic",
+  "author": "iMe Lab",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "postbuild": "cp ./src/faucet/faucet.abi.json dist/faucet/faucet.abi.json",

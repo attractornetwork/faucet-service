@@ -4,6 +4,7 @@ import { EthersConfig } from './ethers.config';
 
 @Module({
   providers: [
+    EthersConfig,
     {
       provide: ethers.providers.Provider,
       inject: [EthersConfig],

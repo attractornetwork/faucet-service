@@ -1,12 +1,13 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { IsPort, validateOrReject } from 'class-validator';
+import { Injectable } from '@nestjs/common';
+import { IsPort } from 'class-validator';
+import { validateSyncOrFail } from 'src/common';
 
 @Injectable()
-export class WebserverConfig implements OnModuleInit {
+export class WebserverConfig {
   @IsPort()
-  public readonly port = parseInt(process.env.PORT ?? '0');
+  public readonly port = parseInt(process.env.PORT || '0');
 
-  async onModuleInit(): Promise<void> {
-    await validateOrReject(this);
+  constructor() {
+    validateSyncOrFail(this);
   }
 }

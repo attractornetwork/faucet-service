@@ -1,14 +1,14 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   IsEthereumAddress,
   IsNotEmpty,
   IsString,
   Length,
-  validateOrReject,
 } from 'class-validator';
+import { validateSyncOrFail } from 'src/common';
 
 @Injectable()
-export class FaucetConfig implements OnModuleInit {
+export class FaucetConfig {
   /**
    * ## Address of deployed Faucet smart-contract
    */
@@ -40,7 +40,7 @@ export class FaucetConfig implements OnModuleInit {
   @IsNotEmpty()
   public readonly identitySalt = process.env.FAUCET_IDENTITY_SALT;
 
-  async onModuleInit(): Promise<void> {
-    await validateOrReject(this);
+  constructor() {
+    validateSyncOrFail(this);
   }
 }

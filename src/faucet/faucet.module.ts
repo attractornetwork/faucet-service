@@ -10,9 +10,10 @@ import {
   FaucetSignerRef,
   FaucetWorkerRef,
 } from './faucet.ref';
+import { ExplorerModule } from 'src/explorer/explorer.module';
 
 @Module({
-  imports: [EthersModule],
+  imports: [EthersModule, ExplorerModule],
   providers: [
     FaucetConfig,
     FaucetService,

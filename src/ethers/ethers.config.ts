@@ -1,12 +1,13 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { IsUrl, validateOrReject } from 'class-validator';
+import { Injectable } from '@nestjs/common';
+import { IsUrl } from 'class-validator';
+import { validateSyncOrFail } from 'src/common';
 
 @Injectable()
-export class EthersConfig implements OnModuleInit {
+export class EthersConfig {
   @IsUrl()
   public readonly provierUrl = process.env.ETHERS_PROVIDER_URL;
 
-  async onModuleInit(): Promise<void> {
-    await validateOrReject(this);
+  constructor() {
+    validateSyncOrFail(this);
   }
 }

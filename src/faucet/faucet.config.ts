@@ -34,7 +34,7 @@ export class FaucetConfig implements OnModuleInit {
   public readonly signerPk = process.env.FAUCET_SIGNER_PK;
 
   /**
-   * Salt needed to protect identities (ips) from revealing
+   * ## Salt needed to protect identities (ips) from revealing
    */
   @IsString()
   @IsNotEmpty()

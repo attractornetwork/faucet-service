@@ -1,5 +1,10 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
-import { IsEthereumAddress, IsString, Length, validateOrReject } from 'class-validator';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  IsEthereumAddress,
+  IsString,
+  Length,
+  validateOrReject,
+} from 'class-validator';
 
 @Injectable()
 export class FaucetConfig implements OnModuleInit {

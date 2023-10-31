@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
-import { FaucetInfo, FaucetTrigger } from "./dto";
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { FaucetInfo, FaucetTrigger } from './dto';
 
 @Controller('faucet')
 export class FaucetController {

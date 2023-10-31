@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { IsPort, validateOrReject } from 'class-validator';
 
 @Injectable()

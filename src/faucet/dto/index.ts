@@ -4,7 +4,7 @@ export class FaucetInfo {
   balance: number;
   dispension: {
     token: string;
-    amount: number;    
+    amount: number;
   };
 }
 

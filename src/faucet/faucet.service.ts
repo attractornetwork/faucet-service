@@ -1,5 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ethers } from 'ethers';
+import { ExplorerService } from 'src/explorer/explorer.service';
 import { getToken } from 'src/token/get-token';
 import { IToken } from 'src/token/token.iface';
 import {
@@ -18,6 +19,7 @@ export class FaucetService implements OnModuleInit {
     @Inject(FaucetWorkerRef) private readonly worker: ethers.Wallet,
     @Inject(FaucetWorkerRef) private readonly signer: ethers.Wallet,
     @Inject(FaucetContractRef) private readonly faucet: Faucet,
+    private readonly explorer: ExplorerService,
   ) {}
 
   async onModuleInit(): Promise<void> {

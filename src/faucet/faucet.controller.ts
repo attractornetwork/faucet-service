@@ -1,5 +1,9 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { FaucetInfoResponse, FaucetTriggerRequest, FaucetTriggerResponse } from './dto';
+import {
+  FaucetInfoResponse,
+  FaucetTriggerRequest,
+  FaucetTriggerResponse,
+} from './dto';
 
 @Controller('faucet')
 export class FaucetController {
@@ -9,7 +13,9 @@ export class FaucetController {
   }
 
   @Post('/trigger')
-  async triggerFaucet(@Body() { address }: FaucetTriggerRequest): Promise<FaucetTriggerResponse> {
+  async triggerFaucet(
+    @Body() { address }: FaucetTriggerRequest,
+  ): Promise<FaucetTriggerResponse> {
     throw new Error('Not implemented');
   }
 }

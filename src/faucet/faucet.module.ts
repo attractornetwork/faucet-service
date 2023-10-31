@@ -5,7 +5,11 @@ import { FaucetConfig } from './faucet.config';
 import { FaucetController } from './faucet.controller';
 import { FaucetService } from './faucet.service';
 import FaucetABI from './faucet.abi.json';
-import { FaucetContractRef, FaucetSignerRef, FaucetWorkerRef } from './faucet.ref';
+import {
+  FaucetContractRef,
+  FaucetSignerRef,
+  FaucetWorkerRef,
+} from './faucet.ref';
 
 @Module({
   imports: [EthersModule],

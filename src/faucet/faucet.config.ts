@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import {
   IsEthereumAddress,
+  IsNotEmpty,
   IsString,
   Length,
   validateOrReject,
@@ -18,6 +19,10 @@ export class FaucetConfig implements OnModuleInit {
   @IsString()
   @Length(66, 66)
   public readonly signerPk = process.env.FAUCET_SIGNER_PK;
+
+  @IsString()
+  @IsNotEmpty()
+  public readonly identitySalt = process.env.FAUCET_IDENTITY_SALT;
 
   async onModuleInit(): Promise<void> {
     await validateOrReject(this);

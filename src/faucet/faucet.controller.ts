@@ -1,21 +1,28 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Request } from 'express';
 import {
   FaucetInfoResponse,
   FaucetTriggerRequest,
   FaucetTriggerResponse,
 } from './dto';
+import { FaucetService } from './faucet.service';
 
 @Controller('faucet')
 export class FaucetController {
+  constructor(private readonly faucetService: FaucetService) {}
+
   @Get('/info')
   async getInfo(): Promise<FaucetInfoResponse> {
-    throw new Error('Not implemented');
+    return await this.faucetService.getInfo();
   }
 
   @Post('/trigger')
   async triggerFaucet(
     @Body() { address }: FaucetTriggerRequest,
+    @Req() request: Request,
   ): Promise<FaucetTriggerResponse> {
-    throw new Error('Not implemented');
+    const ip = request.header('x-real-ip');
+    if (!ip) throw new Error('x-real-ip header not set');
+    return await this.faucetService.trigger(address, ip);
   }
 }

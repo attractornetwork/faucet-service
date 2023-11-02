@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Request } from 'express';
 import {
   FaucetInfoResponse,
@@ -17,6 +25,7 @@ export class FaucetController {
   }
 
   @Post('/trigger')
+  @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   async triggerFaucet(
     @Body() { address }: FaucetTriggerRequest,
     @Req() request: Request,

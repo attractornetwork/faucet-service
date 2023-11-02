@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ethers } from 'ethers';
 import { EthersModule } from 'src/ethers/ethers.module';
 import { FaucetConfig } from './faucet.config';
 import { FaucetController } from './faucet.controller';
 import { FaucetService } from './faucet.service';
-import FaucetABI from './faucet.abi.json';
+import * as FaucetABI from './faucet.abi.json';
 import {
   FaucetContractRef,
   FaucetSignerRef,
@@ -40,6 +40,10 @@ import { ExplorerModule } from 'src/explorer/explorer.module';
         { contractAddress }: FaucetConfig,
         provider: ethers.providers.Provider,
       ) => new ethers.Contract(contractAddress, FaucetABI, provider),
+    },
+    {
+      provide: Logger,
+      useValue: new Logger('Faucet'),
     },
   ],
   controllers: [FaucetController],

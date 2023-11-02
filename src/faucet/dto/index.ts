@@ -1,3 +1,5 @@
+import { IsEthereumAddress } from 'class-validator';
+
 export class FaucetInfoResponse {
   enabled: true;
   address: string;
@@ -12,7 +14,8 @@ export class FaucetInfoResponse {
 }
 
 export class FaucetTriggerRequest {
-  address: string;
+  @IsEthereumAddress()
+  readonly address: string;
 }
 
 export class FaucetTriggerResponse {

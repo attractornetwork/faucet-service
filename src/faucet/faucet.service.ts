@@ -1,4 +1,10 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  HttpException,
+  Inject,
+  Injectable,
+  Logger,
+  OnModuleInit,
+} from '@nestjs/common';
 import { createHash } from 'crypto';
 import { ethers, Signature } from 'ethers';
 import { ExplorerService } from 'src/explorer/explorer.service';
@@ -6,7 +12,11 @@ import { getToken } from 'src/token/get-token';
 import { IToken } from 'src/token/token.iface';
 import { FaucetInfoResponse, FaucetTriggerResponse } from './dto';
 import { FaucetConfig } from './faucet.config';
-import { FaucetContractRef, FaucetWorkerRef } from './faucet.ref';
+import {
+  FaucetContractRef,
+  FaucetSignerRef,
+  FaucetWorkerRef,
+} from './faucet.ref';
 import { Faucet } from './faucet.typechain';
 
 @Injectable()
@@ -15,10 +25,11 @@ export class FaucetService implements OnModuleInit {
 
   constructor(
     @Inject(FaucetWorkerRef) private readonly worker: ethers.Wallet,
-    @Inject(FaucetWorkerRef) private readonly signer: ethers.Wallet,
+    @Inject(FaucetSignerRef) private readonly signer: ethers.Wallet,
     @Inject(FaucetContractRef) private readonly faucet: Faucet,
     private readonly explorer: ExplorerService,
     private readonly config: FaucetConfig,
+    private readonly logger: Logger,
   ) {}
 
   async onModuleInit(): Promise<void> {
@@ -52,19 +63,29 @@ export class FaucetService implements OnModuleInit {
   }
 
   async trigger(address: string, ip: string): Promise<FaucetTriggerResponse> {
+    address = ethers.utils.getAddress(address);
+
     const identity = this.createIdentity(ip);
     const deadline = this.electDeadline();
     const signature = await this.createSignature(address, identity, deadline);
     const actor = { addr: address, name: identity };
     const faucet = this.faucet.connect(this.worker);
-    const tx = await faucet.dispense(actor, signature, deadline);
 
-    return {
-      transaction: {
-        hash: tx.hash,
-        url: this.explorer.locateTransaction(tx.hash),
-      },
-    };
+    try {
+      const tx = await faucet.dispense(actor, signature, deadline);
+
+      return {
+        transaction: {
+          hash: tx.hash,
+          url: this.explorer.locateTransaction(tx.hash),
+        },
+      };
+    } catch (err) {
+      throw new HttpException(
+        "Seems like you've already received your tokens. Try later",
+        500,
+      );
+    }
   }
 
   private electDeadline(): number {

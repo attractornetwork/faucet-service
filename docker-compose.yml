@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  faucet:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 127.0.0.1:3000:3000/tcp
+    env_file: .env

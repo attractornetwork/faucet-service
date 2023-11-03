@@ -11,7 +11,7 @@ class FaucetToken {
   symbol: string;
 }
 
-class FaucetDispension {
+class FaucetDispensation {
   @ApiProperty({ type: FaucetToken })
   token: FaucetToken;
 
@@ -29,8 +29,8 @@ export class FaucetInfoResponse {
   @ApiProperty({ example: 9996 })
   balance: number;
 
-  @ApiProperty({ type: FaucetDispension })
-  dispension: FaucetDispension;
+  @ApiProperty({ type: FaucetDispensation })
+  dispensation: FaucetDispensation;
 }
 
 export class FaucetTriggerRequest {

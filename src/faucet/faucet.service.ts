@@ -49,7 +49,7 @@ export class FaucetService implements OnModuleInit {
         await this.token.balanceOf(this.faucet.address),
         await this.token.decimals(),
       ),
-      dispension: {
+      dispensation: {
         token: {
           address: this.token.address(),
           symbol: await this.token.symbol(),

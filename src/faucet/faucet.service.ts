@@ -5,7 +5,7 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
-import { createHash } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
 import { ethers, Signature } from 'ethers';
 import { ExplorerService } from 'src/explorer/explorer.service';
 import { getToken } from 'src/token/get-token';
@@ -65,20 +65,36 @@ export class FaucetService implements OnModuleInit {
   async trigger(address: string, ip: string): Promise<FaucetTriggerResponse> {
     address = ethers.utils.getAddress(address);
 
+    const dispensionId = randomBytes(12).toString('base64url');
+    this.logger.log(
+      `Started dispension id=${dispensionId} addr=${address} ip=${ip}`,
+    );
+
     const identity = this.createIdentity(ip);
     const deadline = this.electDeadline();
     const signature = await this.createSignature(address, identity, deadline);
     const actor = { addr: address, name: identity };
     const faucet = this.faucet.connect(this.worker);
 
-    const tx = await faucet.dispense(actor, signature, deadline);
+    try {
+      const tx = await faucet.dispense(actor, signature, deadline);
+      this.logger.log(`Dispension id=${dispensionId} succeeded`);
 
-    return {
-      transaction: {
-        hash: tx.hash,
-        url: this.explorer.locateTransaction(tx.hash),
-      },
-    };
+      return {
+        transaction: {
+          hash: tx.hash,
+          url: this.explorer.locateTransaction(tx.hash),
+        },
+      };
+    } catch (err) {
+      this.logger.warn(`Dispension id=${dispensionId} failed`);
+      this.logger.warn(err);
+
+      throw new HttpException(
+        'Seems like you received your tokens recently. Try later.',
+        500,
+      );
+    }
   }
 
   private electDeadline(): number {

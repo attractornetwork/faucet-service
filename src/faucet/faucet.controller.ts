@@ -7,6 +7,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { Request } from 'express';
 import {
   FaucetInfoResponse,
@@ -20,12 +21,15 @@ export class FaucetController {
   constructor(private readonly faucetService: FaucetService) {}
 
   @Get('/info')
+  @ApiResponse({ type: FaucetInfoResponse })
   async getInfo(): Promise<FaucetInfoResponse> {
     return await this.faucetService.getInfo();
   }
 
   @Post('/trigger')
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
+  @ApiBody({ type: FaucetTriggerRequest })
+  @ApiResponse({ type: FaucetTriggerResponse })
   async triggerFaucet(
     @Body() { address }: FaucetTriggerRequest,
     @Req() request: Request,

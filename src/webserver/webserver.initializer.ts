@@ -17,6 +17,7 @@ export class WebserverInitializer {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);
 
+    app.enableCors({ origin: '*' });
     await app.listen(this.config.port);
   }
 }

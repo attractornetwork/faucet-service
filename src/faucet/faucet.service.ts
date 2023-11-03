@@ -71,21 +71,14 @@ export class FaucetService implements OnModuleInit {
     const actor = { addr: address, name: identity };
     const faucet = this.faucet.connect(this.worker);
 
-    try {
-      const tx = await faucet.dispense(actor, signature, deadline);
+    const tx = await faucet.dispense(actor, signature, deadline);
 
-      return {
-        transaction: {
-          hash: tx.hash,
-          url: this.explorer.locateTransaction(tx.hash),
-        },
-      };
-    } catch (err) {
-      throw new HttpException(
-        "Seems like you've already received your tokens. Try later",
-        500,
-      );
-    }
+    return {
+      transaction: {
+        hash: tx.hash,
+        url: this.explorer.locateTransaction(tx.hash),
+      },
+    };
   }
 
   private electDeadline(): number {

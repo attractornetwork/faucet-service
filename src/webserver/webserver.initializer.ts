@@ -11,9 +11,7 @@ export class WebserverInitializer {
       .setTitle('Attractor faucet')
       .setDescription('Attractor faucet API description')
       .setVersion('1.0')
-      .addTag('faucet')
-      .addServer('http://localhost:3000/', 'Local service')
-      .addServer('https://faucet.shapley.attra.me/api/', 'Shapley testnet service')
+      .addServer(this.config.publicUrl, 'Primary server')
       .build();
 
     const document = SwaggerModule.createDocument(app, config);

@@ -7,7 +7,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import {
   FaucetInfoResponse,
@@ -17,6 +17,7 @@ import {
 import { FaucetService } from './faucet.service';
 
 @Controller('faucet')
+@ApiTags('faucet')
 export class FaucetController {
   constructor(private readonly faucetService: FaucetService) {}
 

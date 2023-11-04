@@ -1,5 +1,6 @@
 import {
   HttpException,
+  HttpStatus,
   Inject,
   Injectable,
   Logger,
@@ -69,6 +70,12 @@ export class FaucetService implements OnModuleInit {
     this.logger.log(
       `Started dispension id=${dispensionId} addr=${address} ip=${ip}`,
     );
+
+    const signer = await this.faucet.callStatic.signer();
+    if (signer !== this.signer.address) {
+      const msg = 'Faucet is unavailable. Please try later or contact Team';
+      throw new HttpException(msg, 503);
+    }
 
     const identity = this.createIdentity(ip);
     const deadline = this.electDeadline();

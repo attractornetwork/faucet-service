@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { validateSyncOrFail } from 'src/common';
 
 @Injectable()
 export class CaptchaConfig {
@@ -19,4 +20,8 @@ export class CaptchaConfig {
   @IsNotEmpty()
   @IsOptional()
   readonly bypassKey? = process.env.CAPTCHA_BYPASS_KEY;
+
+  constructor() {
+    validateSyncOrFail(this);
+  }
 }

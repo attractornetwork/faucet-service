@@ -40,6 +40,16 @@ export class FaucetConfig {
   @IsNotEmpty()
   public readonly identitySalt = process.env.FAUCET_IDENTITY_SALT;
 
+  /**
+   * ## Comma separated list of team IP addresses
+   */
+  @IsString()
+  private readonly teamIp = process.env.FAUCET_TEAM_IP ?? '';
+
+  public teamIpAddrs(): string[] {
+    return this.teamIp.split(',');
+  }
+
   constructor() {
     validateSyncOrFail(this);
   }

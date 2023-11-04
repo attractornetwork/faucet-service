@@ -1,6 +1,5 @@
 import {
   HttpException,
-  HttpStatus,
   Inject,
   Injectable,
   Logger,
@@ -111,9 +110,16 @@ export class FaucetService implements OnModuleInit {
   }
 
   private createIdentity(ip: string): string {
-    const checksum = `You're not gonna know my ip (${ip}) because ${this.config.identitySalt}`;
+    const salt = this.getSalt(ip);
+    const checksum = `You're not gonna know my ip (${ip}) because ${salt}`;
     const hash = createHash('sha256').update(checksum);
     return '0x' + hash.digest('hex');
+  }
+
+  private getSalt(ip: string): string {
+    const isTeam = this.config.teamIpAddrs().includes(ip);
+    if (isTeam) return randomBytes(32).toString('base64url');
+    else return this.config.identitySalt;
   }
 
   private async createSignature(

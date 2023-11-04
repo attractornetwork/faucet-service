@@ -11,9 +11,10 @@ import {
   FaucetWorkerRef,
 } from './faucet.ref';
 import { ExplorerModule } from 'src/explorer/explorer.module';
+import { CaptchaModule } from 'src/captcha/captcha.module';
 
 @Module({
-  imports: [EthersModule, ExplorerModule],
+  imports: [EthersModule, ExplorerModule, CaptchaModule],
   providers: [
     FaucetConfig,
     FaucetService,

@@ -1,7 +1,8 @@
-import { CanActivate, ExecutionContext, HttpException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpException, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { CaptchaService } from './captcha.service';
 
+@Injectable()
 export class CaptchaGuard implements CanActivate {
   public static readonly ValueHeader = 'X-Captcha-Value';
   public static readonly BypassHeader = 'X-Captcha-Bypass-Key';

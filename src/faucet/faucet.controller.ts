@@ -4,13 +4,12 @@ import {
   Get,
   Post,
   Req,
-  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBody, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
-import { CaptchaGuard } from 'src/captcha/captcha.guard';
+import { CaptchaProtected } from 'src/captcha/captcha.decorator';
 import {
   FaucetInfoResponse,
   FaucetTriggerRequest,
@@ -33,17 +32,7 @@ export class FaucetController {
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   @ApiBody({ type: FaucetTriggerRequest })
   @ApiResponse({ type: FaucetTriggerResponse })
-  @UseGuards(CaptchaGuard)
-  @ApiHeader({
-    name: CaptchaGuard.ValueHeader,
-    required: false,
-    description: 'Value of captcha solved on client side',
-  })
-  @ApiHeader({
-    name: CaptchaGuard.BypassHeader,
-    required: false,
-    description: 'Key to bypass captcha check',
-  })
+  @CaptchaProtected()
   async triggerFaucet(
     @Body() { address }: FaucetTriggerRequest,
     @Req() request: Request,

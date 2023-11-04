@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, HttpException, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  Injectable,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { CaptchaService } from './captcha.service';
 

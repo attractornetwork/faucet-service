@@ -63,7 +63,11 @@ export class FaucetService implements OnModuleInit {
   }
 
   async trigger(address: string, ip: string): Promise<FaucetTriggerResponse> {
-    address = ethers.utils.getAddress(address);
+    try {
+      address = ethers.utils.getAddress(address);
+    } catch (thrown) {
+      throw new HttpException('Address checksum is invalid', 400);
+    }
 
     const dispensionId = randomBytes(12).toString('base64url');
     this.logger.log(

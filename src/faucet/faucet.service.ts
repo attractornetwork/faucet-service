@@ -131,7 +131,7 @@ export class FaucetService implements OnModuleInit {
 
   private electDeadline(): number {
     const timestamp = Math.round(Date.now() / 1000);
-    const tenSeconds = 60 * 10;
+    const tenSeconds = 10;
     return timestamp + tenSeconds;
   }
 

@@ -80,6 +80,8 @@ export class FaucetService implements OnModuleInit {
       throw new HttpException(msg, 503);
     }
 
+    await this.awakeChain();
+
     const identity = this.createIdentity(ip);
     const deadline = this.electDeadline();
     const signature = await this.createSignature(address, identity, deadline);
@@ -107,10 +109,30 @@ export class FaucetService implements OnModuleInit {
     }
   }
 
+  private async awakeChain(): Promise<void> {
+    let attempts = 0;
+
+    while (attempts < 3) {
+      const latestBlock = await this.worker.provider.getBlock('latest');
+      const time = Math.round(Date.now() / 1000);
+      const blockAge = time - latestBlock.timestamp;
+      const almostAnHour = 60 * 55;
+      const isAwaken = blockAge < almostAnHour;
+      if (isAwaken) break;
+      this.logger.log('Awakening the chain...');
+      const tx = await this.worker.sendTransaction({
+        to: this.worker.address,
+        value: ethers.utils.parseEther('0.1'),
+      });
+      await tx.wait(1);
+      attempts = attempts + 1;
+    }
+  }
+
   private electDeadline(): number {
     const timestamp = Math.round(Date.now() / 1000);
-    const tenMinutes = 60 * 10;
-    return timestamp + tenMinutes;
+    const tenSeconds = 60 * 10;
+    return timestamp + tenSeconds;
   }
 
   private createIdentity(ip: string): string {

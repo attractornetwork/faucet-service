@@ -80,8 +80,6 @@ export class FaucetService implements OnModuleInit {
       throw new HttpException(msg, 503);
     }
 
-    await this.awakeChain();
-
     const identity = this.createIdentity(ip);
     const deadline = this.electDeadline();
     const signature = await this.createSignature(address, identity, deadline);
@@ -89,7 +87,10 @@ export class FaucetService implements OnModuleInit {
     const faucet = this.faucet.connect(this.worker);
 
     try {
-      const tx = await faucet.dispense(actor, signature, deadline);
+      const tx = await faucet.dispense(actor, signature, deadline, {
+        gasPrice: 2e9,
+        gasLimit: 200000,
+      });
       this.logger.log(`Dispension id=${dispensionId} succeeded`);
 
       return {
@@ -116,6 +117,7 @@ export class FaucetService implements OnModuleInit {
       const latestBlock = await this.worker.provider.getBlock('latest');
       const time = Math.round(Date.now() / 1000);
       const blockAge = time - latestBlock.timestamp;
+      this.logger.log(`Latest block (${latestBlock.number}) elapsed ${blockAge}s`);
       const almostAnHour = 60 * 55;
       const isAwaken = blockAge < almostAnHour;
       if (isAwaken) break;
@@ -123,6 +125,9 @@ export class FaucetService implements OnModuleInit {
       const tx = await this.worker.sendTransaction({
         to: this.worker.address,
         value: ethers.utils.parseEther('0.1'),
+        gasPrice: 2e9,
+        gasLimit: 21000,
+        chainId: 9701,
       });
       await tx.wait(1);
       attempts = attempts + 1;

@@ -89,7 +89,6 @@ export class FaucetService implements OnModuleInit {
     try {
       const tx = await faucet.dispense(actor, signature, deadline, {
         gasPrice: 2e9,
-        gasLimit: 200000,
       });
       this.logger.log(`Dispension id=${dispensionId} succeeded`);
 

@@ -4,6 +4,7 @@ import { WebserverInitializer } from './webserver/webserver.initializer';
 
 (async () => {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   const webserver = app.get(WebserverInitializer);
   await webserver.start(app);
 })();

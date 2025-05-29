@@ -10,6 +10,5 @@ FROM node:16 as runtime
 WORKDIR /app
 COPY --from=builder /workbench/dist dist
 COPY --from=builder /workbench/node_modules node_modules
-ENV PORT 3000
 EXPOSE $PORT
 CMD ["node", "dist/main"]
